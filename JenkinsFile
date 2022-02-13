@@ -1,0 +1,24 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Build') {
+            steps {
+                git branch: 'newBranch', url: 'https://github.com/Teryna/booksService.git'
+                bat'./mvnw clean compile'
+            }
+        }
+
+         stage('Test') {
+            steps {
+                bat'./mvnw test'
+            }
+
+            post {
+                always {
+                    junit '**/target/surefire-reports/TEST-*.xml'
+                }
+            }
+        }
+    }
+}
